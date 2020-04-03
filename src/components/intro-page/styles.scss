@@ -1,0 +1,36 @@
+@import "~styles/globals";
+.app-intropage {
+  &-container {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    background: url("~images/intro_bg.png") no-repeat;
+    background-size: cover;
+    text-align: center;
+  }
+  &-map {
+    margin: 0 auto;
+    margin-top: 135px;
+  }
+  &-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &-introtext {
+    margin-left: 13px;
+    margin-top: 43px;
+    display: inline-flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    text-align: left;
+    font-family: $base-font-family;
+    font-size: 22px;
+    font-weight: normal;
+    font-stretch: normal;
+    line-height: 26px;
+    letter-spacing: 7px;
+    color: #21898e;
+  }
+}

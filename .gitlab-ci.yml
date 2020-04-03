@@ -1,0 +1,107 @@
+image: docker:stable
+
+services:
+  - docker:dind
+# variables:
+#  DOCKER_HOST: tcp://localhost:2375
+
+variables:
+  KUBECONFIG: /etc/deploy/config
+
+before_script:
+  - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.gitlab.com
+
+build-meera-oman:
+  stage: build
+  only:
+    - master
+    - check-permit
+  script:
+    - >
+      docker build -t registry.gitlab.com/target-digital-transformation/ams-fe/meera-oman/$CI_COMMIT_REF_NAME:$CI_COMMIT_SHA
+      --build-arg NPM_AUTH_TOKEN=${NPM_AUTH_TOKEN}
+      --build-arg BUILD_PROFILE_NAME=meera-oman
+      --build-arg GIT_COMMIT_HASH=${CI_COMMIT_SHA:0:8} .
+    - docker tag registry.gitlab.com/target-digital-transformation/ams-fe/meera-oman/$CI_COMMIT_REF_NAME:$CI_COMMIT_SHA registry.gitlab.com/target-digital-transformation/ams-fe/meera-oman/$CI_COMMIT_REF_NAME:${CI_COMMIT_SHA:0:8}
+    - docker tag registry.gitlab.com/target-digital-transformation/ams-fe/meera-oman/$CI_COMMIT_REF_NAME:$CI_COMMIT_SHA registry.gitlab.com/target-digital-transformation/ams-fe/meera-oman/$CI_COMMIT_REF_NAME:latest
+    - docker push registry.gitlab.com/target-digital-transformation/ams-fe/meera-oman/$CI_COMMIT_REF_NAME
+  #allow_failure: false
+  when: manual
+
+build-texelabs:
+  stage: build
+  only:
+    - master
+    - check-permit
+  script:
+    - >
+      docker build -t registry.gitlab.com/target-digital-transformation/ams-fe/dev/$CI_COMMIT_REF_NAME:$CI_COMMIT_SHA
+      --build-arg NPM_AUTH_TOKEN=${NPM_AUTH_TOKEN}
+      --build-arg BUILD_PROFILE_NAME=texelabs 
+      --build-arg GIT_COMMIT_HASH=${CI_COMMIT_SHA:0:8} .
+    - docker tag registry.gitlab.com/target-digital-transformation/ams-fe/dev/$CI_COMMIT_REF_NAME:$CI_COMMIT_SHA registry.gitlab.com/target-digital-transformation/ams-fe/dev/$CI_COMMIT_REF_NAME:${CI_COMMIT_SHA:0:8}
+    - docker tag registry.gitlab.com/target-digital-transformation/ams-fe/dev/$CI_COMMIT_REF_NAME:$CI_COMMIT_SHA registry.gitlab.com/target-digital-transformation/ams-fe/dev/$CI_COMMIT_REF_NAME:latest
+    - docker push registry.gitlab.com/target-digital-transformation/ams-fe/dev/$CI_COMMIT_REF_NAME
+  #allow_failure: false
+  when: manual
+
+build-ams-qa:
+  stage: build
+  only:
+    - master
+    - check-permit
+  script:
+    - >
+      docker build -t registry.gitlab.com/target-digital-transformation/ams-fe/qa/$CI_COMMIT_REF_NAME:$CI_COMMIT_SHA
+      --build-arg NPM_AUTH_TOKEN=${NPM_AUTH_TOKEN}
+      --build-arg BUILD_PROFILE_NAME=qa-ams
+      --build-arg GIT_COMMIT_HASH=${CI_COMMIT_SHA:0:8} .
+    - docker tag registry.gitlab.com/target-digital-transformation/ams-fe/qa/$CI_COMMIT_REF_NAME:$CI_COMMIT_SHA registry.gitlab.com/target-digital-transformation/ams-fe/qa/$CI_COMMIT_REF_NAME:${CI_COMMIT_SHA:0:8}
+    - docker tag registry.gitlab.com/target-digital-transformation/ams-fe/qa/$CI_COMMIT_REF_NAME:$CI_COMMIT_SHA registry.gitlab.com/target-digital-transformation/ams-fe/qa/$CI_COMMIT_REF_NAME:latest
+    - docker push registry.gitlab.com/target-digital-transformation/ams-fe/qa/$CI_COMMIT_REF_NAME
+  #allow_failure: false
+  when: manual
+
+build-ams-demo:
+  stage: build
+  only:
+    - master
+    - check-permit
+  script:
+    - >
+      docker build -t registry.gitlab.com/target-digital-transformation/ams-fe/demo/$CI_COMMIT_REF_NAME:$CI_COMMIT_SHA
+      --build-arg NPM_AUTH_TOKEN=${NPM_AUTH_TOKEN}
+      --build-arg BUILD_PROFILE_NAME=demo-ams 
+      --build-arg GIT_COMMIT_HASH=${CI_COMMIT_SHA:0:8} .
+    - docker tag registry.gitlab.com/target-digital-transformation/ams-fe/demo/$CI_COMMIT_REF_NAME:$CI_COMMIT_SHA registry.gitlab.com/target-digital-transformation/ams-fe/demo/$CI_COMMIT_REF_NAME:${CI_COMMIT_SHA:0:8}
+    - docker tag registry.gitlab.com/target-digital-transformation/ams-fe/demo/$CI_COMMIT_REF_NAME:$CI_COMMIT_SHA registry.gitlab.com/target-digital-transformation/ams-fe/demo/$CI_COMMIT_REF_NAME:latest
+    - docker push registry.gitlab.com/target-digital-transformation/ams-fe/demo/$CI_COMMIT_REF_NAME
+  #allow_failure: false
+  when: manual
+  
+deploy-ams-demo and notifications:
+  stage: deploy
+  image: lwolf/helm-kubectl-docker:v152_213
+  before_script:
+    - mkdir -p /etc/deploy
+    - echo "$AWS_KUBE_CONF" > ${KUBECONFIG}
+    - apk add --update -t deps curl
+    - apk add --update -t deps openssl
+  script:
+    - kubectl rollout history deploy/ams-frontend  -n demo-ams-01
+    - kubectl set image deploy/ams-frontend  -n demo-ams-01 ams-frontend="registry.gitlab.com/target-digital-transformation/ams-fe/demo/$CI_COMMIT_REF_NAME:${CI_COMMIT_SHA:0:8}"
+    - sleep 20
+    - export STATUS=`kubectl describe deploy/ams-frontend  -n demo-ams-01 | grep -w  Available | awk '{print $2}'`
+    - if [ "$STATUS" = "False"  ]; then echo "pipeline has failed" & exit 1 ; else echo 'pipeline has passed' ;fi
+    # @grant with slack
+    - 'curl -X POST --data-urlencode \
+        "payload={\"channel\": \"U0NQNQL0L\", 
+        \"text\": \" demo-ams-01 | front-end has been successfully deployed. commitid:${CI_COMMIT_SHA:0:8}.  <https://demo-ams-01.digitalenergycloud.com |Click here> for details!\"}" 
+        https://hooks.slack.com/services/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'
+    # @grant with eamil
+    - echo  "$AWS_SES_INPUT_TXT" >>  AWS_SES_INPUT.txt
+    - openssl s_client -crlf -quiet -starttls smtp -connect email-smtp.us-east-1.amazonaws.com:587 < AWS_SES_INPUT.txt
+
+  only:
+    - master
+  when: manual

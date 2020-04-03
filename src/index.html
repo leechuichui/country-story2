@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=640, user-scalable=no, target-densitydpi=device-dpi">
+  <meta charset="UTF-8">
+  <meta name="msapplication-tap-highlight" content="no" />
+  <!-- <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script> -->
+  
+  <link rel="icon" href="/favicon.ico?v=<%= webpack.hash %>" />
+  <title>乡间物语</title>
+</head>
+
+<body>
+  <div id="root"></div>
+  <!-- <script>
+      var phoneWidth = parseInt(window.screen.width);
+  
+      var phoneScale = phoneWidth / 750;
+  
+      var ua = navigator.userAgent;
+  
+      if (/Android (\d+\.\d+)/.test(ua)) {
+  
+        var version = parseFloat(RegExp.$1);
+  
+        if (version > 2.3) {
+  
+          document.write('<meta name="viewport" content="width=750, minimum-scale = ‘+phoneScale+‘, maximum-scale = ‘+phoneScale+‘, target-densitydpi=device-dpi">');
+  
+        } else {
+  
+          document.write('<meta name="viewport" content="width=750, target-densitydpi=device-dpi">');
+  
+        }
+  
+      } else {
+  
+        document.write('<meta name="viewport" content="width=750, user-scalable=no, target-densitydpi=device-dpi">');
+  
+      }
+    </script> -->
+    <script>
+      // wx.config({
+      //   debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+      //   appId: '', // 必填，公众号的唯一标识
+      //   timestamp:"" , // 必填，生成签名的时间戳
+      //   nonceStr: '', // 必填，生成签名的随机串
+      //   signature: '',// 必填，签名
+      //   jsApiList: [] // 必填，需要使用的JS接口列表
+      // });
+    </script>
+</body>
+  </html>

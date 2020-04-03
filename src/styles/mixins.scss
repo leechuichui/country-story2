@@ -1,0 +1,11 @@
+@mixin generate-font($name, $font-file-name) {
+  $file-name: "~"fonts/#{$font-file-name};
+  @font-face {
+    font-family: $name;
+    src: url(#{$file-name}.eot);
+    src: url(#{$file-name}.eot?#iefix) format("embedded-opentype"),
+      url(#{$file-name}.woff) format("woff"),
+      url(#{$file-name}.ttf) format("truetype"),
+      url(#{$file-name}.svg#robotobold) format("svg");
+  }
+}

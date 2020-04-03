@@ -1,0 +1,16 @@
+.app-people {
+  z-index: 1;
+  &-container {
+    position: relative;
+  }
+  &-role {
+    position: relative;
+    z-index: 2;
+  }
+  &-bottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+  }
+}

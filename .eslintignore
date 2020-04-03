@@ -1,0 +1,8 @@
+dist/*
+mock/*
+public/*
+fonts/*
+images/*
+webpack.config.*.js
+*.json
+.eslintrc.js

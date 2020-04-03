@@ -1,0 +1,60 @@
+@import "~styles/globals";
+
+.app-endpage {
+  &-container {
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+  }
+  &-header {
+    padding-top: 76px;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    &-text {
+      margin-top: 32px;
+      line-height: 26px;
+      letter-spacing: 1px;
+      color: #656565;
+      font-size: 33px;
+      font-weight: normal;
+      font-stretch: normal;
+      font-family: $base-font-family;
+    }
+  }
+
+  &-content {
+    padding-top: 30px;
+  }
+  &-footer {
+    position: absolute;
+    bottom: 28px;
+    z-index: 1;
+    width: 100%;
+  }
+  &-bg {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+  }
+  &-partner-list {
+    display: flex;
+    justify-content: center;
+    li {
+      margin: 0 5px;
+    }
+  }
+  &-company {
+    margin-top: 16px;
+    display: flex;
+    font-family: $font-family;
+    justify-content: center;
+    font-weight: normal;
+    font-stretch: normal;
+    line-height: 26px;
+    letter-spacing: 0px;
+    color: #656565;
+  }
+}

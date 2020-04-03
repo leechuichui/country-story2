@@ -1,0 +1,53 @@
+@import "~styles/globals";
+.app-startpage {
+  &-container {
+    height: 100%;
+    background: url("~images/start_bg.png") no-repeat;
+    background-size: cover;
+  }
+  &-leftcloud {
+    position: absolute;
+    top: 47px;
+    left: 58px;
+  }
+  &-rightcloud {
+    position: absolute;
+    top: 209px;
+    right: 46px;
+  }
+  &-sun {
+    position: absolute;
+    top: 102px;
+    right: 185px;
+  }
+  &-people {
+    top: 445px;
+    left: 126px;
+  }
+  &-btngo {
+    position: absolute;
+    bottom: 125px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+  }
+  &-welcome-wrapper {
+    position: absolute;
+    bottom: 243px;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+  &-welcome {
+    display: inline-flex;
+    flex-direction: column;
+    font-family: $base-font-family;
+    font-size: 26px;
+    font-weight: normal;
+    font-stretch: normal;
+    line-height: 32px;
+    letter-spacing: 0px;
+    color: rgba(33, 137, 142, 0.98);
+  }
+}

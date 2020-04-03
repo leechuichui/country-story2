@@ -1,0 +1,24 @@
+@import "~styles/globals";
+.app-optionitem {
+  &-container {
+    width: 218px;
+    height: 55px;
+    line-height: 55px;
+    border-radius: 10px;
+    text-align: center;
+    color: white;
+    background: #58b076;
+    font-family: $yihei-font;
+    font-size: 29px;
+    font-weight: normal;
+    font-stretch: normal;
+    letter-spacing: 3px;
+    color: #ffffff;
+    &--correct {
+      background: #4d96d5;
+    }
+    &--error {
+      background: #8a8a8a;
+    }
+  }
+}

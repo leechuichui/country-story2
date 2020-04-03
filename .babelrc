@@ -1,0 +1,76 @@
+{
+  "env": {
+    "development": {
+      "presets": ["react",
+        [
+          "env",
+          {
+            "targets": {
+              "browser": "last 2 versions, ie >= 11, safari >= 7"
+            },
+            "loose": true
+          }
+        ]
+      ],
+      "plugins": [
+        "react-hot-loader/babel",
+        "external-helpers",
+        "transform-decorators-legacy",
+        "transform-object-rest-spread",
+        "transform-class-properties",
+        "syntax-dynamic-import"
+      ]
+    },
+    "debug": {
+      "presets": [
+        ["env", {
+            "modules": false,
+            "loose": true,
+            "useBuiltIns": true,
+            "exclude": [
+              "transform-regenerator"
+            ]
+        }],
+        "react"
+      ],
+      "plugins": [
+        "react-hot-loader/babel",
+        "external-helpers",
+        "transform-decorators-legacy",
+        "transform-object-rest-spread",
+        "transform-class-properties",
+        "syntax-dynamic-import",
+        ["fast-async", {
+          "compiler": {
+            "promises": true,
+            "generators": false
+          },
+          "runtimePattern": null,
+          "useRuntimeModule": false
+        }]
+      ]
+    },
+    "production": {
+      "presets": [
+        "react",
+        ["env", {
+            "targets": {
+              "browser": "last 2 versions, ie >= 11, safari >= 7"
+            },
+            "modules": false,
+            "loose": true,
+            "useBuiltIns": true
+        }]
+      ],
+      "plugins": [
+        "external-helpers",
+        "transform-react-remove-prop-types",
+        "react-hot-loader/babel",
+        "transform-decorators-legacy",
+        "transform-object-rest-spread",
+        "transform-class-properties",
+        "syntax-dynamic-import"
+      ]
+    }
+  }
+}
